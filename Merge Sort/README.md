@@ -10,6 +10,9 @@ Merge sort is defined as a sorting algorithm that works by dividing an array int
 + These sorted subarrays are merged together, and we get bigger sorted subarrays.
 + This merging process is continued until the sorted array is built from the smaller subarrays.
 
+![image](https://github.com/psychomita/PCC-CSBS391/assets/133328192/1139d034-53b8-4e0b-9471-7adc55fe7cf8)
+
+
 ## Complexity Analysis of Merge Sort :
 ### Time Complexity 
     O(N log(N))  
