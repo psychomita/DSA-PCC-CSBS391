@@ -7,6 +7,8 @@ Depth First Traversal (or DFS) for a graph is similar to Depth First Traversal o
 ## Working :
 Depth-first search is an algorithm for traversing or searching tree or graph data structures. The algorithm starts at the root node (selecting some arbitrary node as the root node in the case of a graph) and explores as far as possible along each branch before backtracking.
 
+![image](https://github.com/psychomita/PCC-CSBS391/assets/133328192/028a1eba-42d2-4216-9127-62c11daa4d4c)
+
 **Time complexity:** 
 
     O(V + E), where V is the number of vertices and E is the number of edges in the graph.
