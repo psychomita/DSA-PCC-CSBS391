@@ -1,49 +1,63 @@
 #include<stdio.h>
-#include<stdlib.h>
-void swap(int *a, int *b)
+#define MAX 100
+void swap(int *x, int *y)
 {
-	int c=*a;
-	*a=*b;
-	*b=c;
+	int t;
+	t=*x;
+	*x=*y;
+	*y=t;
 }
-void heapify(int arr[], int n, int i)
+void buildheap(int a[], int n, int i)
 {
-	int max=i;
-	int l=2*i+1;
-	int r=2*i+2;
-	if(l<n && arr[l]>arr[max])
-		max=l;
-	if(r<n && arr[r]>arr[max])
-		max=r;
-	if(max!=i)
+	int large=i;
+	int left=2*i+1;
+	int right=2*i+2;
+	if(left<n && a[left]>a[large])
+	 large=left;
+	
+	if(right<n && a[right]>a[large])
+	 large=right;
+	 
+	if(i!=large)
 	{
-		swap(&arr[i], &arr[max]);
-		heapify(arr,n,max);
+		swap(&a[i],&a[large]);
+		buildheap(a,n,large);
+	}
+	
+}
+void sort(int a[], int n)
+{
+	int i;
+	for(i=n/2-1;i>=0;i--)
+	{
+		buildheap(a,n,i);
+	}
+	for(i=n-1;i>=0;i--)
+	{
+		swap(&a[i],&a[0]);
+		buildheap(a,i,0);
 	}
 }
-void sort(int arr[], int n)
-{
-	for(int i=n/2-1;i>=0;i--)
-		heapify(arr,n,i);
-	for(int i=n-1;i>=0;i--)
-	{
-		swap(&arr[0],&arr[i]);
-		heapify(arr,i,0);
-	}	
-}	
 int main()
 {
+	int a[MAX];
 	int n,i;
-	printf("Enter the number of elements : ");
-	scanf("%d", &n);
-	int *arr=malloc(n*sizeof(int));
-	printf("Enter the elements : \n");
+	printf("\n Enter number of elements ");
+	scanf("%d",&n);
+	
 	for(i=0;i<n;i++)
-		scanf("%d", &arr[i]);
-	sort(arr,n);
-	printf("The sorted elements are : \n");
+	{
+		printf("\n Enter the number ");
+		scanf("%d",&a[i]);
+	}
+	printf("\n Before Sorting ");
 	for(i=0;i<n;i++)
-		printf("%d\t",arr[i]);
-	printf("\n");
-	return 0;
+		printf(" %d", a[i]);
+		
+	sort(a,n);//funtion call
+	
+	printf("\n After Sorting ");
+	for(i=0;i<n;i++)
+		printf(" %d", a[i]);
+	
 }
