@@ -8,10 +8,10 @@ typedef struct node
 }node;
 
 node *start ,*temp,*ptr;
-void insertFront()
+void insertFirst()
 {
 	temp=(node*)malloc(sizeof(node));
-	printf(" Enter the value to be inserted: ");
+	printf("Enter the data : ");
 	scanf("%d",&temp->data);
 	temp->prev=NULL;
 	temp->next=NULL;
@@ -25,10 +25,10 @@ void insertFront()
 		start=temp;
 	}
 }
-void insertEnd()
+void insertLast()
 {
 	temp=(node*)malloc(sizeof(node));
-	printf(" Enter the value to be inserted: ");
+	printf("Enter the data : ");
 	scanf("%d",&temp->data);
 	temp->prev=NULL;
 	temp->next=NULL;
@@ -45,23 +45,23 @@ void insertEnd()
 		temp->prev=ptr;
 	}
 }
-void deleteFront()
+void deleteFirst()
 {
 	if(start==NULL)
 	 printf("\n U N D E R F L O W");
 	else
 	{
-		printf("\n Delete Element = %d",start->data);
+		printf("\n Delete Element %d",start->data);
 		start=start->next;
 	}
 }
-void deleteEnd()
+void deleteLast()
 {
 	if(start==NULL)
 	 printf("\n U N D E R F L O W");
 	else if(start->next==NULL)
 	{
-		printf("\n Deleted Element = %d",start->data);
+		printf("\n Deleted Element %d",start->data);
 		start=NULL;
 	}
 	else
@@ -83,62 +83,69 @@ void display()
 	else
 	{
 		ptr=start;
-		printf("\n Elements are:\n");
+		printf("\n Elements are ..\n");
 		while(ptr!=NULL)
 		{
-			printf(" %d\t",ptr->data);
+			printf("\n %d",ptr->data);
 			ptr=ptr->next;
 		}
 	}
 }
-void reverse()
+void search()
 {
-    node* current = start;
-    node* temp = NULL;
-
-    while (current != NULL) 
-    {
-        temp = current->prev;
-        current->prev = current->next;
-        current->next = temp;
-        current = current->prev;
-    }
-
-    if (temp != NULL)
-        start = temp->prev;
+	int num,p=0;
+	if(start==NULL)
+	 printf("\n Search Not Possible ");
+	else
+	{
+		printf("\n Enter the data : ");
+		scanf("%d",&num);
+		ptr=start;
+		while(ptr!=NULL)
+		{
+			p++;
+			if(ptr->data==num)
+			 break;
+			ptr=ptr->next;
+		}
+		if(ptr==NULL)
+		 printf("\n Number not Present ");
+		else
+		 printf("\n Number present at position %d",p);
+	}
 }
 void main()
 {
 	int ch;
 	start=NULL;
-    printf(" 1 for Insert Front ");
-	printf("\n 2 for Insert End ");
-	printf("\n 3 for Delete Front ");
-	printf("\n 4 for Delete End ");
-	printf("\n 5 for Display ");
-	printf("\n 6 for Reverse ");
-	printf("\n 7 for Exit ");
 	while(1)
 	{
-		printf("\n Enter choice: ");
+		printf("\n\n 1 for Insert First ");
+		printf("\n 2 for Insert Last ");
+		printf("\n 3 for Delete First ");
+		printf("\n 4 for Delete Last ");
+		printf("\n 5 for Display ");
+		printf("\n 6 for Search ");
+		printf("\n 7 for Exit ");
+		printf("\n Enter choice ");
 		scanf("%d",&ch);
 		
 		switch(ch)
 		{
 			case 1:
-			insertFront();
+			insertFirst();
 			break;
 			
 			case 2:
-			insertEnd();
+			insertLast();
 			break;
 			
 			case 3:
-			deleteFront();
+			deleteFirst();
 			break;
 			
 			case 4:
-			deleteEnd();
+			deleteLast();
 			break;
 			
 			case 5:
@@ -146,8 +153,7 @@ void main()
 			break;
 			
 			case 6:
-			reverse();
-            printf("\n Linked list reversed.");
+			search();
 			break;
 			
 			case 7:
