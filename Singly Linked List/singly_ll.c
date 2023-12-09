@@ -1,149 +1,203 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct node
+{
+	int data; //actual data
+	struct node *link; //address of next node;
+}node;
 
-// Define the structure of a node
-struct Node {
-    int data;
-    struct Node* next;
-};
-
-// Function to insert a new node at the end of the linked list
-void insert(struct Node** head, int newData) {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-    newNode->data = newData;
-    newNode->next = NULL;
-
-    if (*head == NULL) {
-        *head = newNode;
-        return;
-    }
-
-    struct Node* current = *head;
-    while (current->next != NULL) {
-        current = current->next;
-    }
-    current->next = newNode;
+node *start, *temp, *ptr;
+void insertFirst()
+{
+	temp=(node*)malloc(sizeof(node));
+	printf("Enter the data : ");
+	scanf("%d",&temp->data);
+	temp->link=NULL;
+	
+	if(start==NULL)
+	 start=temp;
+	else
+	{
+		temp->link=start;
+		start=temp;
+	}
+	
+}
+void insertLast()
+{
+	temp=(node*)malloc(sizeof(node));
+	printf("Enter the data : ");
+	scanf("%d",&temp->data);
+	temp->link=NULL;
+	
+	if(start==NULL)
+	 start=temp;
+	else
+	{
+		ptr=start;
+		while(ptr->link!=NULL) // until last node
+		 ptr=ptr->link; //move to the next node
+		
+		ptr->link=temp;
+	}
 }
 
-// Function to delete a node with a specific value from the linked list
-void delete(struct Node** head, int key) {
-    struct Node* temp = *head;
-    struct Node* prev = NULL;
-
-    if (temp != NULL && temp->data == key) {
-        *head = temp->next;
-        free(temp);
-        return;
-    }
-
-    while (temp != NULL && temp->data != key) {
-        prev = temp;
-        temp = temp->next;
-    }
-
-    if (temp == NULL) {
-        return;
-    }
-
-    prev->next = temp->next;
-    free(temp);
+void deleteFirst()
+{
+	if(start==NULL)
+	 printf("\n U N D E R F L O W");
+	else
+	{
+		printf("\n Delete Element %d",start->data);
+		start=start->link;
+	}
 }
-
-// Function to display the linked list
-void display(struct Node* head) {
-    struct Node* current = head;
-    while (current != NULL) {
-        printf("%d -> ", current->data);
-        current = current->next;
-    }
-    printf("\n");
+void deleteLast()
+{
+	if(start==NULL)
+	 printf("\n U N D E R F L O W");
+	else if(start->link==NULL)
+	{	printf("\n Delete Element %d",start->data);
+		start=NULL;
+	}
+	else
+	{
+		ptr=start;
+		while(ptr->link->link!=NULL)
+		 ptr=ptr->link;
+		
+		printf("\n Delete Element %d",ptr->link->data);
+		ptr->link=NULL;
+	}
 }
-
-// Function to reverse the linked list
-void reverse(struct Node** head) {
-    struct Node* prev = NULL;
-    struct Node* current = *head;
-    struct Node* next = NULL;
-
-    while (current != NULL) {
-        next = current->next;
-        current->next = prev;
-        prev = current;
-        current = next;
-    }
-
-    *head = prev;
+void deleteAny()
+{
+	int pos,flag=0;
+	if(start==NULL)
+	 printf("\n List is Empty ");
+	else
+	{
+		printf("\n Enter the position ");
+		scanf("%d",&pos);
+		
+		if(pos==1)
+		 start=start->link;
+		else
+		{
+			ptr=start;
+			int i=1;
+			while(ptr!=NULL)
+			{
+				if(i==pos-1)
+				{
+					printf("\n Delete Element %d",ptr->link->data);
+					ptr->link=ptr->link->link;
+					flag=1;
+					break;
+				}
+				ptr=ptr->link;
+				i++;
+			}
+		}
+		if(flag==0)
+		 printf("\n Element not Present ");
+	}
 }
-
-// Function to sort the linked list using bubble sort
-void sort(struct Node** head) {
-    if (*head == NULL || (*head)->next == NULL) {
+void sort() 
+{
+    int swapped, i,temp;
+    node* ptr1;
+    node* lptr = NULL;
+	if (start == NULL || start->link == NULL)
         return;
-    }
-
-    struct Node* current = *head;
-    struct Node* nextNode;
-    int temp;
-
-    while (current != NULL) {
-        nextNode = current->next;
-
-        while (nextNode != NULL) {
-            if (current->data > nextNode->data) {
-                temp = current->data;
-                current->data = nextNode->data;
-                nextNode->data = temp;
+     do 
+	 {
+        swapped = 0;
+        ptr1 = start;
+        while (ptr1->link != lptr) 
+		{
+            if (ptr1->data > ptr1->link->data) 
+			{
+                // Swap data of adjacent nodes
+                temp = ptr1->data;
+                ptr1->data = ptr1->link->data;
+                ptr1->link->data = temp;
+                swapped = 1;
             }
-            nextNode = nextNode->next;
+            ptr1 = ptr1->link;
         }
-
-        current = current->next;
-    }
+        lptr = ptr1;
+    } while (swapped);
+	printf("\n List has been Sorted ");
 }
+void display()
+{
+	if(start==NULL)
+	 printf("\n List is Empty ");
+	 
+	else
+	{
+		ptr=start;
+		printf("\n Elements are : ");
+		while(ptr!=NULL)
+		{
+			printf("\n %d",ptr->data);
+			ptr=ptr->link;
+		}
+	}
+}
+int main()
+{
+	int ch;
+	start=NULL;
+	while(1)
+	{
+		printf("\n 1 for Insert First ");
+		printf("\n 2 for Insert Last ");
+		printf("\n 3 for Delete First ");
+		printf("\n 4 for Delete Last ");
+		printf("\n 5 for Delete Any ");
+		printf("\n 6 for Sort ");
+		printf("\n 7 for Display ");
+		printf("\n 8 for Exit ");
+		printf("\n\n Enter choice ");
+		scanf("%d",&ch);
+		
+		switch(ch)
+		{
+			case 1:
+			insertFirst();
+			break;
+			
+			case 2:
+			insertLast();
+			break;
+			
+			case 3:
+			deleteFirst();
+			break;
+			
+			case 4:
+			deleteLast();
+			break;
 
-int main() {
-    struct Node* head = NULL;
-    int ch, value;
-    printf("1. Insert\n");
-    printf("2. Delete\n");
-    printf("3. Display\n");
-    printf("4. Reverse\n");
-    printf("5. Sort\n");
-    printf("6. Exit\n");
-    while (1) 
-    {
-        printf("Enter your choice: ");
-        scanf("%d", &ch);
-
-        switch (ch) {
-            case 1:
-                printf("Enter number to be inserted: ");
-                scanf("%d", &value);
-                insert(&head, value);
-                break;
-            case 2:
-                printf("Enter number to be deleted: ");
-                scanf("%d", &value);
-                delete(&head, value);
-                break;
-            case 3:
-                display(head);
-                break;
-            case 4:
-                reverse(&head);
-                printf("Linked list reversed.\n");
-                break;
-            case 5:
-                sort(&head);
-                printf("Linked list sorted.\n");
-                break;
-            case 6:
-                exit(1);
-                break;
-            default:
-                printf("Invalid choice!\n");
-        }
-    }
-
-    return 0;
+			case 5:
+			deleteAny();
+			break;
+			
+			case 6:
+			sort();
+			break;
+			
+			case 7:
+			display();
+			break;
+			
+			case 8:
+			exit(1);
+			
+			default:
+			printf("\n Oops! Wrong choice ");
+		}
+	}
 }
