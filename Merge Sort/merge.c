@@ -1,74 +1,63 @@
 #include<stdio.h>
-#include<stdlib.h>
-void merge(int arr[], int lb, int mid, int ub)
+#define MAX 100
+void sort(int a[], int f, int m, int l)
 {
-	int i,j,k;
-	int n1=mid-lb+1;
-	int n2=ub-mid;
-	int l[n1],u[n2];
-	
-	for(i=0;i<n1;i++) //copying data into temporary arrays
-		l[i]=arr[lb+i];
-	
-	for(j=0;j<n2;j++) //copying data into temporary arrays
-		u[j]=arr[mid+1+j];
-	
-	//merging the temporary arrays back into arr[]
-	i=0;
-	j=0;
-	for(k=lb;i<n1 && j<n2;k++)
+	int temp[MAX];
+	int i=f,j=m+1,k=f,x;
+	while(i<=m && j<=l)
 	{
-		if(l[i]<=u[j])
-		{
-			arr[k]=l[i];
-			i++;
-		}
+		if(a[i]<a[j])
+		 temp[k++]=a[i++];
+		else if(a[j]<a[i])
+		 temp[k++]=a[j++];
 		else
 		{
-			arr[k]=u[j];
-			j++;
+			temp[k++]=a[i++];
+			temp[k++]=a[j++];
 		}
 	}
-	
-	//copying remaining elements of l[] if any
-	while(i<n1)
+	if(i>m)
 	{
-		arr[k]=l[i];
-		i++;
-		k++;
+		for(x=j;x<=l;x++)
+		 temp[k++]=a[x];
 	}
-	
-	//copying remaining elements of r[] if any
-	while(j<n2)
+	else
 	{
-		arr[k]=u[j];
-		j++;
-		k++;
+		for(x=i;x<=m;x++)
+		 temp[k++]=a[x];
 	}
-}	
-void sort(int arr[], int lb, int ub) //lb is the lower bound //ub is the upper bound
+	for(x=f;x<=l;x++)
+		 a[x]=temp[x];
+}
+void merge(int a[], int f, int l)
 {
-	if(lb<ub)
+	int m;
+	if(f<l)
 	{
-		int mid=(lb+ub)/2; //finding middle index
-		sort(arr,lb,mid);
-		sort(arr,mid+1,ub);
-		merge(arr,lb,mid,ub);
+		m=(f+l)/2;
+		merge(a,f,m);
+		merge(a,m+1,l);
+		sort(a,f,m,l);
 	}
 }
 int main()
 {
-	int n,i;
-	printf("Enter the number of elements : ");
-	scanf("%d", &n);
-	int *arr=malloc(n*sizeof(int));
-	printf("Enter the elements : \n");
+	int a[MAX];
+	int i,n;
+	printf("Enter the size ");
+	scanf("%d",&n);
 	for(i=0;i<n;i++)
-		scanf("%d", &arr[i]);
-	sort(arr,0,n-1);
-	printf("The sorted elements are : \n");
+	{
+		printf("Enter the number ");
+		scanf("%d",&a[i]);
+	}
+	printf("\n Before Sorting ");
 	for(i=0;i<n;i++)
-		printf("%d\t",arr[i]);
-	printf("\n");
-	return 0;
+	 printf(" %d",a[i]);
+	
+	merge(a,0,n-1);
+	printf("\n After Sorting ");
+	for(i=0;i<n;i++)
+	 printf(" %d",a[i]);
+	
 }
