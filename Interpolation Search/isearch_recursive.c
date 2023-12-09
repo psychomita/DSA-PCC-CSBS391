@@ -1,4 +1,4 @@
-//binary search recursive
+//interpolation search recursive
 #define MAX 100
 #include<stdio.h>
 int search(int a[],int b, int e, int num)
