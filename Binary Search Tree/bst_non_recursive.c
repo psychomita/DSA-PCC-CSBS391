@@ -1,168 +1,112 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Structure for a BST Node
-struct Node 
+// Binary Search Tree Node
+typedef struct Node 
 {
-    int data;
+    int key;
     struct Node* left;
     struct Node* right;
-};
+}node;
 
-// Structure for a Stack Node
-struct StackNode 
+// Function to create a new node
+node* createNode(int key) 
 {
-    struct Node* data;
-    struct StackNode* next;
-};
-
-// Stack to support non-recursive traversal
-struct Stack 
-{
-    struct StackNode* top;
-};
-
-// Function to create a new Node
-struct Node* newNode(int data) 
-{
-    struct Node* node = (struct Node*)malloc(sizeof(struct Node));
-    node->data = data;
-    node->left = node->right = NULL;
-    return node;
+    node* newNode = (node*)malloc(sizeof(node*));
+    newNode->key = key;
+    newNode->left = newNode->right = NULL;
+    return newNode;
 }
 
-// Function to initialize an empty stack
-struct Stack* createStack() 
-{
-    struct Stack* stack = (struct Stack*)malloc(sizeof(struct Stack));
-    stack->top = NULL;
-    return stack;
-}
-
-
-// Function to push a Node onto the stack
-void push(struct Stack* stack, struct Node* node) 
-{
-    struct StackNode* stackNode = (struct StackNode*)malloc(sizeof(struct StackNode));
-    stackNode->data = node;
-    stackNode->next = stack->top;
-    stack->top = stackNode;
-}
-
-// Function to check if the stack is empty
-int isEmpty(struct Stack* stack) 
-{
-    return stack->top == NULL;
-}
-
-// Function to pop a Node from the stack
-struct Node* pop(struct Stack* stack) 
-{
-    if (isEmpty(stack))
-        return NULL;
-    struct StackNode* temp = stack->top;
-    stack->top = stack->top->next;
-    struct Node* popped = temp->data;
-    free(temp);
-    return popped;
-}
-
-// Function for non-recursive preorder traversal
-void preorderTraversal(struct Node* root) 
+// Function to insert a key into the BST
+node* insert(node* root, int key) 
 {
     if (root == NULL)
-        return;
-    struct Stack* stack = createStack();
-    push(stack, root);
-    while (!isEmpty(stack)) {
-        struct Node* current = pop(stack);
-        printf("%d ", current->data);
-        if (current->right)
-            push(stack, current->right);
-        if (current->left)
-            push(stack, current->left);
-    }
+        return createNode(key);
+    if (key < root->key) 
+        root->left = insert(root->left, key);
+    else if (key > root->key)
+        root->right = insert(root->right, key);
+    return root;
 }
 
-// Function for non-recursive inorder traversal
-void inorderTraversal(struct Node* root) 
+// Function for in-order traversal of the BST (non-recursive)
+void inOrderTraversal(node* root) 
 {
-    if (root == NULL)
-        return;
-    struct Stack* stack = createStack();
-    struct Node* current = root;
-    while (current || !isEmpty(stack)) 
+    node* stack[100];
+    int top = -1;
+    node* current = root;
+    while (current != NULL || top != -1) 
     {
-        while (current) 
+        while (current != NULL) 
         {
-            push(stack, current);
+            stack[++top] = current;
             current = current->left;
         }
-        current = pop(stack);
-        printf("%d ", current->data);
+        current = stack[top--];
+        printf("%d ", current->key);
         current = current->right;
     }
 }
 
-// Function for non-recursive postorder traversal
-void postorderTraversal(struct Node* root) 
+// Function for pre-order traversal of the BST (non-recursive)
+void preOrderTraversal(node* root) 
 {
     if (root == NULL)
         return;
-    struct Stack* stack1 = createStack();
-    struct Stack* stack2 = createStack();
-    push(stack1, root);
-    while (!isEmpty(stack1)) 
+    node* stack[100];
+    int top = -1;
+    stack[++top] = root;
+    while (top != -1) 
     {
-        struct Node* current = pop(stack1);
-        push(stack2, current);
-        if (current->left)
-            push(stack1, current->left);
-        if (current->right)
-            push(stack1, current->right);
-    }
-    while (!isEmpty(stack2)) 
-    {
-        struct Node* temp = pop(stack2);
-        printf("%d ", temp->data);
+        node* current = stack[top--];
+        printf("%d ", current->key);
+        if (current->right != NULL)
+            stack[++top] = current->right;
+        if (current->left != NULL)
+            stack[++top] = current->left;
     }
 }
 
-// Function to insert a node into BST
-struct Node* insert(struct Node* root, int data) 
+// Function for post-order traversal of the BST (non-recursive)
+void postOrderTraversal(node* root) 
 {
     if (root == NULL)
-        return newNode(data);
-    if (data < root->data)
-        root->left = insert(root->left, data);
-    else if (data > root->data)
-        root->right = insert(root->right, data);
-    return root;
+        return;
+    node* stack1[100];
+    node* stack2[100];
+    int top1 = -1, top2 = -1;
+    stack1[++top1] = root;
+    while (top1 != -1) 
+    {
+        node* current = stack1[top1--];
+        stack2[++top2] = current;
+        if (current->left != NULL)
+            stack1[++top1] = current->left;
+        if (current->right != NULL)
+            stack1[++top1] = current->right;
+    }
+    while (top2 != -1)
+        printf("%d ", stack2[top2--]->key);
 }
 
 int main() 
 {
-    struct Node* root = NULL;
-    int numNodes, data,i;
-    
+    node* root = NULL;
+    int numNodes, data,i;    
     printf("Enter the number of nodes in the BST: ");
-    scanf("%d", &numNodes);
-    
+    scanf("%d", &numNodes);    
     printf("Enter the values of the nodes:\n");
     for ( i = 0; i < numNodes; i++) 
     {
         scanf("%d", &data);
         root = insert(root, data);
     }
-
     printf("Preorder Traversal: ");
-    preorderTraversal(root);
-
+    preOrderTraversal(root);
     printf("\nInorder Traversal: ");
-    inorderTraversal(root);
-
+    inOrderTraversal(root);
     printf("\nPostorder Traversal: ");
-    postorderTraversal(root);
-
+    postOrderTraversal(root);
     return 0;
 }
